@@ -1,0 +1,1723 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Campo de Glória — Mesa Virtual</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@400;500&display=swap');
+
+:root {
+  --gold: #C9A227;
+  --gold-l: #E8C547;
+  --dark: #080C0A;
+  --dark2: #0F1410;
+  --dark3: #161C17;
+  --dark4: #1E2620;
+  --mid: #2A3328;
+  --border: #334433;
+  --light: #E4EDE0;
+  --muted: #6A8060;
+  --green: #3DBE6A;
+  --green-field: #1A4A28;
+  --green-field2: #1F5530;
+  --red: #C0392B;
+  --blue: #2E86C1;
+  --purple: #8E44AD;
+  --flow: #C9A227;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--dark);
+  color: var(--light);
+  font-family: 'Barlow', sans-serif;
+  font-size: 13px;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── LOBBY ── */
+#lobby {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  gap: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(30,60,30,0.4) 0%, transparent 70%), var(--dark);
+}
+.lobby-title {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 72px;
+  letter-spacing: 10px;
+  color: var(--gold);
+  line-height: 1;
+  text-shadow: 0 0 60px rgba(201,162,39,0.3);
+  margin-bottom: 4px;
+}
+.lobby-sub {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 40px;
+}
+.lobby-card {
+  background: var(--dark3);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--gold);
+  padding: 28px 36px;
+  width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.lobby-section-title {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 14px;
+  letter-spacing: 4px;
+  color: var(--gold);
+  margin-bottom: 2px;
+}
+.lobby-input {
+  background: var(--dark4);
+  border: 1px solid var(--mid);
+  border-bottom: 2px solid var(--gold);
+  color: var(--light);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 16px;
+  letter-spacing: 2px;
+  padding: 8px 12px;
+  width: 100%;
+  outline: none;
+}
+.lobby-input:focus { border-bottom-color: var(--gold-l); }
+.lobby-input::placeholder { color: var(--muted); }
+.lobby-select {
+  background: var(--dark4);
+  border: 1px solid var(--mid);
+  border-bottom: 2px solid var(--gold);
+  color: var(--light);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 14px;
+  padding: 8px 12px;
+  width: 100%;
+  outline: none;
+}
+.lobby-btn {
+  background: var(--gold);
+  color: var(--dark);
+  border: none;
+  font-family: 'Bebas Neue', cursive;
+  font-size: 20px;
+  letter-spacing: 4px;
+  padding: 12px;
+  cursor: pointer;
+  width: 100%;
+  transition: background 0.15s;
+}
+.lobby-btn:hover { background: var(--gold-l); }
+.lobby-btn.secondary {
+  background: var(--dark4);
+  color: var(--gold);
+  border: 1px solid var(--gold);
+  font-size: 16px;
+  padding: 10px;
+}
+.lobby-btn.secondary:hover { background: var(--mid); }
+.lobby-divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 4px 0;
+}
+.lobby-code-display {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 42px;
+  letter-spacing: 12px;
+  color: var(--gold-l);
+  text-align: center;
+  text-shadow: 0 0 20px rgba(201,162,39,0.4);
+  background: var(--dark4);
+  border: 1px solid var(--border);
+  padding: 12px;
+}
+.lobby-info {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* ── APP LAYOUT ── */
+#app {
+  display: none;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── TOP BAR ── */
+.topbar {
+  background: var(--dark2);
+  border-bottom: 2px solid var(--gold);
+  padding: 0 12px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  z-index: 10;
+}
+.topbar-title {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 22px;
+  letter-spacing: 4px;
+  color: var(--gold);
+}
+.topbar-code {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 14px;
+  letter-spacing: 3px;
+  color: var(--muted);
+  background: var(--dark4);
+  border: 1px solid var(--border);
+  padding: 2px 8px;
+}
+.topbar-sep { flex: 1; }
+.score-block {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--dark3);
+  border: 1px solid var(--border);
+  padding: 4px 12px;
+}
+.score-team {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  max-width: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.score-num {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 28px;
+  color: var(--gold);
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
+  transition: color 0.15s;
+}
+.score-num:hover { color: var(--gold-l); }
+.score-dash { font-family: 'Bebas Neue', cursive; font-size: 20px; color: var(--muted); }
+.topbar-btn {
+  background: var(--dark3);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.topbar-btn:hover { border-color: var(--gold); color: var(--gold); }
+.topbar-btn.active { background: var(--gold); color: var(--dark); border-color: var(--gold); }
+.user-badge {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--light);
+  background: var(--mid);
+  border: 1px solid var(--border);
+  padding: 3px 10px;
+}
+
+/* ── MAIN AREA ── */
+.main-area {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ── FIELD WRAPPER ── */
+.field-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--dark);
+  padding: 12px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ── FIELD ── */
+.field-svg-container {
+  position: relative;
+  width: 100%;
+  max-width: 820px;
+  aspect-ratio: 11/7;
+}
+.field-bg {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+}
+.field-tokens-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* ── TOKEN ── */
+.token {
+  position: absolute;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Bebas Neue', cursive;
+  font-size: 13px;
+  letter-spacing: 1px;
+  cursor: grab;
+  user-select: none;
+  pointer-events: all;
+  transform: translate(-50%, -50%);
+  transition: box-shadow 0.2s;
+  border: 2.5px solid;
+  z-index: 5;
+  flex-direction: column;
+  gap: 0;
+}
+.token:active { cursor: grabbing; }
+.token.flow { box-shadow: 0 0 14px 4px rgba(201,162,39,0.7); }
+.token.collapsed { opacity: 0.45; }
+.token.has-ball::after {
+  content: '⚽';
+  position: absolute;
+  bottom: -8px;
+  right: -8px;
+  font-size: 12px;
+  background: var(--dark);
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--gold);
+  z-index: 6;
+}
+.token-initial { font-size: 15px; line-height: 1; }
+.token-ego {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 8px;
+  letter-spacing: 0px;
+  line-height: 1;
+  color: rgba(255,255,255,0.7);
+}
+
+/* ball token */
+.ball-token {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--dark2);
+  border: 2px dashed var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  cursor: grab;
+  pointer-events: all;
+  transform: translate(-50%, -50%);
+  z-index: 8;
+  transition: box-shadow 0.2s;
+}
+.ball-token:hover { box-shadow: 0 0 10px rgba(201,162,39,0.5); }
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: 260px;
+  background: var(--dark2);
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.sidebar-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.sidebar-tab {
+  flex: 1;
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-family: 'Bebas Neue', cursive;
+  font-size: 13px;
+  letter-spacing: 2px;
+  padding: 10px 4px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.15s;
+}
+.sidebar-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+.sidebar-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+}
+.sidebar-content::-webkit-scrollbar { width: 4px; }
+.sidebar-content::-webkit-scrollbar-track { background: var(--dark3); }
+.sidebar-content::-webkit-scrollbar-thumb { background: var(--mid); }
+
+/* ── PLAYER CARDS ── */
+.player-card {
+  background: var(--dark3);
+  border: 1px solid var(--border);
+  border-left: 3px solid;
+  padding: 7px 8px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.player-card:hover { background: var(--dark4); }
+.player-card.selected { border-left-width: 3px; background: var(--dark4); }
+.pc-header {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 5px;
+}
+.pc-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.pc-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.pc-role {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.pc-status-row {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.pc-badge {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 1px 5px;
+  background: var(--mid);
+  color: var(--muted);
+}
+.pc-badge.flow { background: rgba(201,162,39,0.2); color: var(--gold); }
+.pc-badge.collapsed { background: rgba(192,57,43,0.2); color: var(--red); }
+.pc-badge.has-ball { background: rgba(61,190,106,0.15); color: var(--green); }
+
+/* ego pips row */
+.pc-ego-row {
+  display: flex;
+  gap: 3px;
+  margin-top: 4px;
+  align-items: center;
+}
+.pc-ego-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 8px;
+  letter-spacing: 1px;
+  color: var(--muted);
+  text-transform: uppercase;
+  width: 24px;
+  flex-shrink: 0;
+}
+.ego-pip {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--dark);
+  cursor: pointer;
+  transition: all 0.1s;
+  flex-shrink: 0;
+}
+.ego-pip.filled { background: var(--gold); border-color: var(--gold-l); }
+
+/* fatigue */
+.pc-fatigue-row {
+  display: flex;
+  gap: 3px;
+  margin-top: 3px;
+  align-items: center;
+}
+.fatigue-box {
+  width: 10px;
+  height: 10px;
+  border: 1px solid var(--border);
+  background: var(--dark);
+  cursor: pointer;
+  transition: all 0.1s;
+  flex-shrink: 0;
+}
+.fatigue-box.filled { background: var(--red); border-color: var(--red); }
+.fatigue-box.warn { background: #E67E22; border-color: #E67E22; }
+
+/* ── DICE PANEL ── */
+.dice-panel {
+  padding: 10px;
+}
+.dice-title {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 14px;
+  letter-spacing: 4px;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+.dice-pool-selector {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.dice-num-btn {
+  width: 34px;
+  height: 34px;
+  background: var(--dark3);
+  border: 1px solid var(--border);
+  color: var(--light);
+  font-family: 'Bebas Neue', cursive;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dice-num-btn:hover { border-color: var(--gold); color: var(--gold); }
+.dice-num-btn.selected { background: var(--gold); color: var(--dark); border-color: var(--gold); }
+.dice-roll-btn {
+  width: 100%;
+  background: var(--gold);
+  color: var(--dark);
+  border: none;
+  font-family: 'Bebas Neue', cursive;
+  font-size: 22px;
+  letter-spacing: 4px;
+  padding: 10px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  transition: background 0.15s;
+}
+.dice-roll-btn:hover { background: var(--gold-l); }
+.dice-results {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 8px;
+  min-height: 36px;
+}
+.die-face {
+  width: 32px;
+  height: 32px;
+  background: var(--dark3);
+  border: 1.5px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Bebas Neue', cursive;
+  font-size: 18px;
+  color: var(--muted);
+  transition: all 0.3s;
+}
+.die-face.success {
+  background: rgba(61,190,106,0.1);
+  border-color: var(--green);
+  color: var(--green);
+}
+.die-face.rolling {
+  animation: roll 0.4s ease-out;
+}
+@keyframes roll {
+  0% { transform: scale(0.5) rotate(-20deg); opacity: 0; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+.dice-summary {
+  background: var(--dark3);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--green);
+  padding: 8px 10px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px;
+}
+.dice-summary-num {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 32px;
+  color: var(--green);
+  line-height: 1;
+}
+.dice-log {
+  margin-top: 8px;
+  max-height: 120px;
+  overflow-y: auto;
+}
+.dice-log-entry {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px;
+  color: var(--muted);
+  padding: 2px 0;
+  border-bottom: 1px solid var(--dark4);
+}
+.dice-log-entry span { color: var(--light); }
+
+/* ── QUICK REF ── */
+.qref-section { margin-bottom: 12px; }
+.qref-title {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 12px;
+  letter-spacing: 3px;
+  color: var(--gold);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 3px;
+  margin-bottom: 6px;
+}
+.qref-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 3px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  font-size: 11px;
+}
+.qref-label { color: var(--muted); font-family: 'Barlow Condensed', sans-serif; letter-spacing: 0.5px; }
+.qref-value { color: var(--light); font-family: 'Barlow Condensed', sans-serif; font-weight: 700; }
+
+/* ── TOKEN EDITOR MODAL ── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal {
+  background: var(--dark2);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--gold);
+  padding: 20px 24px;
+  width: 340px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.modal-title {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 20px;
+  letter-spacing: 4px;
+  color: var(--gold);
+  margin-bottom: 14px;
+}
+.modal-field { margin-bottom: 10px; }
+.modal-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: block;
+  margin-bottom: 3px;
+}
+.modal-input {
+  background: var(--dark4);
+  border: 1px solid var(--mid);
+  border-bottom: 2px solid var(--gold);
+  color: var(--light);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 15px;
+  padding: 6px 10px;
+  width: 100%;
+  outline: none;
+}
+.modal-row { display: flex; gap: 8px; }
+.modal-btn {
+  background: var(--gold);
+  color: var(--dark);
+  border: none;
+  font-family: 'Bebas Neue', cursive;
+  font-size: 16px;
+  letter-spacing: 3px;
+  padding: 9px 16px;
+  cursor: pointer;
+  flex: 1;
+}
+.modal-btn.cancel {
+  background: var(--dark3);
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+.modal-btn:hover { opacity: 0.85; }
+
+/* color swatches */
+.color-swatches {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+.color-swatch {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.color-swatch.active { border-color: white; }
+
+/* toggle switches */
+.toggle-row {
+  display: flex;
+  gap: 6px;
+  margin-top: 4px;
+}
+.toggle-btn {
+  flex: 1;
+  background: var(--dark3);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.toggle-btn.active { background: var(--gold); color: var(--dark); border-color: var(--gold); }
+.toggle-btn.active.flow { background: var(--flow); }
+.toggle-btn.active.collapsed { background: var(--red); color: white; border-color: var(--red); }
+
+/* ── LOG STRIP (BOTTOM) ── */
+.log-strip {
+  height: 30px;
+  background: var(--dark2);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  gap: 16px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.log-latest {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px;
+  color: var(--muted);
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.log-latest strong { color: var(--gold); }
+.log-online {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: var(--green);
+  flex-shrink: 0;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: var(--dark3); }
+::-webkit-scrollbar-thumb { background: var(--mid); }
+
+/* ── HIDDEN PANEL ── */
+.hidden { display: none !important; }
+
+/* ── NARRADOR STAR ── */
+.narrador-star {
+  font-size: 8px;
+  color: var(--gold);
+  margin-left: 2px;
+}
+</style>
+</head>
+<body>
+
+<!-- ══ LOBBY ══ -->
+<div id="lobby">
+  <div class="lobby-title">CAMPO DE GLÓRIA</div>
+  <div class="lobby-sub">Mesa Virtual · Sistema D6 Pool</div>
+
+  <div class="lobby-card" id="lobby-main">
+    <div>
+      <div class="lobby-section-title">Seu Nome</div>
+      <input class="lobby-input" id="lb-name" placeholder="Como quer ser chamado?" maxlength="20">
+    </div>
+    <div>
+      <div class="lobby-section-title">Seu Personagem</div>
+      <input class="lobby-input" id="lb-char" placeholder="Nome do personagem (ou 'Narrador')" maxlength="20">
+    </div>
+    <div>
+      <div class="lobby-section-title">Posição / Papel</div>
+      <input class="lobby-input" id="lb-role" placeholder="ex: Atacante · Goleiro · Narrador" maxlength="20">
+    </div>
+    <div>
+      <div class="lobby-section-title">Time</div>
+      <select class="lobby-select" id="lb-team">
+        <option value="A">Time A</option>
+        <option value="B">Time B</option>
+        <option value="N">Narrador / Sem time</option>
+      </select>
+    </div>
+    <hr class="lobby-divider">
+    <button class="lobby-btn" onclick="createRoom()">CRIAR NOVA SALA</button>
+    <button class="lobby-btn secondary" onclick="showJoin()">ENTRAR EM SALA EXISTENTE</button>
+  </div>
+
+  <div class="lobby-card hidden" id="lobby-join" style="margin-top:0;">
+    <div class="lobby-section-title">Código da Sala</div>
+    <input class="lobby-input" id="lb-code" placeholder="XXXX" maxlength="4" style="font-size:28px; text-align:center; letter-spacing:10px; text-transform:uppercase;">
+    <button class="lobby-btn" onclick="joinRoom()">ENTRAR NA SALA</button>
+    <button class="lobby-btn secondary" onclick="showMain()">VOLTAR</button>
+  </div>
+
+  <div class="lobby-card hidden" id="lobby-waiting">
+    <div class="lobby-section-title" style="text-align:center;">Sala Criada!</div>
+    <div class="lobby-code-display" id="room-code-display"></div>
+    <div class="lobby-info">Compartilhe esse código com os outros jogadores</div>
+    <div class="lobby-info" id="waiting-count" style="color:var(--gold); margin-top:4px;">Aguardando jogadores...</div>
+    <button class="lobby-btn" onclick="enterApp()" style="margin-top:8px;">ENTRAR NO CAMPO</button>
+    <button class="lobby-btn secondary" onclick="copyCode()">COPIAR CÓDIGO</button>
+  </div>
+</div>
+
+<!-- ══ APP ══ -->
+<div id="app">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-title">CDG</div>
+    <div class="topbar-code" id="room-code-topbar"></div>
+    <div class="score-block">
+      <div class="score-team" id="score-team-a-name">Time A</div>
+      <div class="score-num" onclick="changeScore('A',-1)">-</div>
+      <div class="score-num" id="score-a" onclick="changeScore('A',1)">0</div>
+      <div class="score-dash">×</div>
+      <div class="score-num" id="score-b" onclick="changeScore('B',1)">0</div>
+      <div class="score-num" onclick="changeScore('B',-1)">-</div>
+      <div class="score-team" id="score-team-b-name">Time B</div>
+    </div>
+    <div class="topbar-sep"></div>
+    <button class="topbar-btn" onclick="openAddToken()">+ TOKEN</button>
+    <button class="topbar-btn" id="btn-view-field" onclick="setView('field')" style="display:none;">CAMPO</button>
+    <div class="user-badge" id="user-badge-top"></div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main-area">
+
+    <!-- FIELD -->
+    <div class="field-wrapper">
+      <div class="field-svg-container" id="field-container">
+        <!-- SVG Field -->
+        <svg class="field-bg" viewBox="0 0 820 520" xmlns="http://www.w3.org/2000/svg">
+          <!-- background -->
+          <rect width="820" height="520" fill="#14381E"/>
+          <!-- stripes -->
+          <rect x="0" y="0" width="91" height="520" fill="#163D22" opacity="0.6"/>
+          <rect x="182" y="0" width="91" height="520" fill="#163D22" opacity="0.6"/>
+          <rect x="364" y="0" width="91" height="520" fill="#163D22" opacity="0.6"/>
+          <rect x="546" y="0" width="91" height="520" fill="#163D22" opacity="0.6"/>
+          <rect x="728" y="0" width="92" height="520" fill="#163D22" opacity="0.6"/>
+          <!-- outer border -->
+          <rect x="10" y="10" width="800" height="500" fill="none" stroke="#4A8A50" stroke-width="2.5"/>
+          <!-- center line -->
+          <line x1="410" y1="10" x2="410" y2="510" stroke="#4A8A50" stroke-width="1.5"/>
+          <!-- center circle -->
+          <circle cx="410" cy="260" r="70" fill="none" stroke="#4A8A50" stroke-width="1.5"/>
+          <circle cx="410" cy="260" r="3" fill="#4A8A50"/>
+          <!-- penalty areas -->
+          <rect x="10" y="140" width="110" height="240" fill="none" stroke="#4A8A50" stroke-width="1.5"/>
+          <rect x="700" y="140" width="110" height="240" fill="none" stroke="#4A8A50" stroke-width="1.5"/>
+          <!-- small areas -->
+          <rect x="10" y="195" width="50" height="130" fill="none" stroke="#4A8A50" stroke-width="1.5"/>
+          <rect x="760" y="195" width="50" height="130" fill="none" stroke="#4A8A50" stroke-width="1.5"/>
+          <!-- goals -->
+          <rect x="0" y="215" width="10" height="90" fill="none" stroke="#8ABF90" stroke-width="2"/>
+          <rect x="810" y="215" width="10" height="90" fill="none" stroke="#8ABF90" stroke-width="2"/>
+          <!-- penalty spots -->
+          <circle cx="80" cy="260" r="2.5" fill="#4A8A50"/>
+          <circle cx="740" cy="260" r="2.5" fill="#4A8A50"/>
+          <!-- corner arcs -->
+          <path d="M10,10 A15,15 0 0,1 25,25" fill="none" stroke="#4A8A50" stroke-width="1"/>
+          <path d="M810,10 A15,15 0 0,0 795,25" fill="none" stroke="#4A8A50" stroke-width="1"/>
+          <path d="M10,510 A15,15 0 0,0 25,495" fill="none" stroke="#4A8A50" stroke-width="1"/>
+          <path d="M810,510 A15,15 0 0,1 795,495" fill="none" stroke="#4A8A50" stroke-width="1"/>
+
+          <!-- ZONE LABELS (subtle) -->
+          <text x="62" y="20" text-anchor="middle" font-family="Bebas Neue,cursive" font-size="11" fill="#4A8A50" letter-spacing="1" opacity="0.7">ÁREA A</text>
+          <text x="180" y="20" text-anchor="middle" font-family="Bebas Neue,cursive" font-size="11" fill="#4A8A50" letter-spacing="1" opacity="0.7">DEF ESQ</text>
+          <text x="270" y="20" text-anchor="middle" font-family="Bebas Neue,cursive" font-size="11" fill="#4A8A50" letter-spacing="1" opacity="0.7">DEF DIR</text>
+          <text x="410" y="20" text-anchor="middle" font-family="Bebas Neue,cursive" font-size="11" fill="#4A8A50" letter-spacing="1" opacity="0.7">MEIO</text>
+          <text x="550" y="20" text-anchor="middle" font-family="Bebas Neue,cursive" font-size="11" fill="#4A8A50" letter-spacing="1" opacity="0.7">ATK ESQ</text>
+          <text x="640" y="20" text-anchor="middle" font-family="Bebas Neue,cursive" font-size="11" fill="#4A8A50" letter-spacing="1" opacity="0.7">ATK DIR</text>
+          <text x="758" y="20" text-anchor="middle" font-family="Bebas Neue,cursive" font-size="11" fill="#4A8A50" letter-spacing="1" opacity="0.7">ÁREA B</text>
+
+          <!-- zone dividers (dashed subtle) -->
+          <line x1="120" y1="10" x2="120" y2="510" stroke="#4A8A50" stroke-width="0.8" stroke-dasharray="4,6" opacity="0.4"/>
+          <line x1="220" y1="10" x2="220" y2="510" stroke="#4A8A50" stroke-width="0.8" stroke-dasharray="4,6" opacity="0.4"/>
+          <line x1="600" y1="10" x2="600" y2="510" stroke="#4A8A50" stroke-width="0.8" stroke-dasharray="4,6" opacity="0.4"/>
+          <line x1="700" y1="10" x2="700" y2="510" stroke="#4A8A50" stroke-width="0.8" stroke-dasharray="4,6" opacity="0.4"/>
+        </svg>
+
+        <!-- Tokens layer -->
+        <div class="field-tokens-layer" id="tokens-layer"></div>
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-tabs">
+        <button class="sidebar-tab active" onclick="setSideTab('players',this)">JOGADORES</button>
+        <button class="sidebar-tab" onclick="setSideTab('dice',this)">DADOS</button>
+        <button class="sidebar-tab" onclick="setSideTab('ref',this)">GUIA</button>
+      </div>
+
+      <!-- PLAYERS TAB -->
+      <div class="sidebar-content" id="tab-players">
+        <div id="players-list"></div>
+      </div>
+
+      <!-- DICE TAB -->
+      <div class="sidebar-content hidden" id="tab-dice">
+        <div class="dice-panel">
+          <div class="dice-title">ROLADOR DE D6</div>
+          <div class="dice-pool-selector" id="dice-pool-btns">
+            <!-- generated by JS -->
+          </div>
+          <button class="dice-roll-btn" onclick="rollDice()">⚄ ROLAR</button>
+          <div class="dice-results" id="dice-results"></div>
+          <div class="dice-summary" id="dice-summary" style="display:none;">
+            <div class="dice-summary-num" id="dice-success-num">0</div>
+            <div style="font-family:'Barlow Condensed'; font-size:11px; color:var(--muted); letter-spacing:1px; text-transform:uppercase;">Sucessos (4, 5 ou 6)</div>
+          </div>
+          <div class="dice-log" id="dice-log"></div>
+        </div>
+      </div>
+
+      <!-- REF TAB -->
+      <div class="sidebar-content hidden" id="tab-ref">
+        <div class="qref-section">
+          <div class="qref-title">CONFRONTO</div>
+          <div class="qref-row"><span class="qref-label">Sucesso</span><span class="qref-value">4, 5 ou 6</span></div>
+          <div class="qref-row"><span class="qref-label">Âncora</span><span class="qref-value">+1d6 (Vantagem)</span></div>
+          <div class="qref-row"><span class="qref-label">Vantagem</span><span class="qref-value">+1d6 por fonte</span></div>
+          <div class="qref-row"><span class="qref-label">Desvantagem</span><span class="qref-value">−1d6 por fonte</span></div>
+          <div class="qref-row"><span class="qref-label">Pool zerado/negativo</span><span class="qref-value">Dados Fantasma (2d6, pior)</span></div>
+        </div>
+        <div class="qref-section">
+          <div class="qref-title">PASSES</div>
+          <div class="qref-row"><span class="qref-label">Passe curto</span><span class="qref-value">Dif. 1</span></div>
+          <div class="qref-row"><span class="qref-label">Passe médio</span><span class="qref-value">Dif. 2</span></div>
+          <div class="qref-row"><span class="qref-label">Passe longo</span><span class="qref-value">Dif. 3</span></div>
+          <div class="qref-row"><span class="qref-label">Passe perfeito</span><span class="qref-value">Dif +2 ou Crítico</span></div>
+          <div class="qref-row"><span class="qref-label">Desajeitado</span><span class="qref-value">Faltou 1 → Teste Domínio</span></div>
+        </div>
+        <div class="qref-section">
+          <div class="qref-title">DOMÍNIO</div>
+          <div class="qref-row"><span class="qref-label">Passe desajeitado</span><span class="qref-value">Dif. 2</span></div>
+          <div class="qref-row"><span class="qref-label">Bola solta (sem marcador)</span><span class="qref-value">Dif. 1</span></div>
+          <div class="qref-row"><span class="qref-label">Bola aérea</span><span class="qref-value">Dif. 2</span></div>
+          <div class="qref-row"><span class="qref-label">Sob marcação direta</span><span class="qref-value">Dif. 3</span></div>
+        </div>
+        <div class="qref-section">
+          <div class="qref-title">FADIGA</div>
+          <div class="qref-row"><span class="qref-label">1º–3º confronto físico</span><span class="qref-value">Sem penalidade</span></div>
+          <div class="qref-row"><span class="qref-label">4º confronto</span><span class="qref-value">−1d6</span></div>
+          <div class="qref-row"><span class="qref-label">5º confronto</span><span class="qref-value">−2d6</span></div>
+          <div class="qref-row"><span class="qref-label">6º ou mais</span><span class="qref-value">−3d6 (mín. 1d6)</span></div>
+        </div>
+        <div class="qref-section">
+          <div class="qref-title">EGO</div>
+          <div class="qref-row"><span class="qref-label">Reserva</span><span class="qref-value">3 + Ego</span></div>
+          <div class="qref-row"><span class="qref-label">Flow (gatilho)</span><span class="qref-value">Ego máx ou evento</span></div>
+          <div class="qref-row"><span class="qref-label">Colapso</span><span class="qref-value">Ego = 0 em crise</span></div>
+        </div>
+        <div class="qref-section">
+          <div class="qref-title">ARQUÉTIPOS — PASSIVA</div>
+          <div class="qref-row"><span class="qref-label">O Predador</span><span class="qref-value">+1d6 na área</span></div>
+          <div class="qref-row"><span class="qref-label">O Fantasma</span><span class="qref-value">Age antes de anunciar</span></div>
+          <div class="qref-row"><span class="qref-label">O Tirano</span><span class="qref-value">−1d6 psicológico</span></div>
+          <div class="qref-row"><span class="qref-label">O Motor</span><span class="qref-value">2 confrontos sem fadiga</span></div>
+          <div class="qref-row"><span class="qref-label">O Estrategista</span><span class="qref-value">Nega confronto 1×</span></div>
+          <div class="qref-row"><span class="qref-label">O Instinto</span><span class="qref-value">Interrompe ação 1×/cena</span></div>
+          <div class="qref-row"><span class="qref-label">O Colossão</span><span class="qref-value">Físico sem Desvantagem</span></div>
+          <div class="qref-row"><span class="qref-label">O Guardião</span><span class="qref-value">Ego secundário na defesa</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOG STRIP -->
+  <div class="log-strip">
+    <div class="log-latest" id="log-latest">Bem-vindo ao Campo de Glória.</div>
+    <div class="log-online" id="log-online">● 1 online</div>
+  </div>
+</div>
+
+<!-- ADD/EDIT TOKEN MODAL -->
+<div class="modal-overlay hidden" id="token-modal">
+  <div class="modal">
+    <div class="modal-title" id="modal-title">NOVO TOKEN</div>
+    <div class="modal-field">
+      <label class="modal-label">Nome do Personagem</label>
+      <input class="modal-input" id="m-name" placeholder="ex: Nagi Seishiro" maxlength="20">
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">Inicial (aparece no token)</label>
+      <input class="modal-input" id="m-initial" placeholder="ex: N" maxlength="2">
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">Posição / Papel</label>
+      <input class="modal-input" id="m-role" placeholder="ex: FW · GK · Narrador" maxlength="16">
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">Time</label>
+      <div class="toggle-row">
+        <button class="toggle-btn active" id="mt-A" onclick="setModalTeam('A')">TIME A</button>
+        <button class="toggle-btn" id="mt-B" onclick="setModalTeam('B')">TIME B</button>
+        <button class="toggle-btn" id="mt-N" onclick="setModalTeam('N')">NARRADOR</button>
+      </div>
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">Cor do Token</label>
+      <div class="color-swatches" id="modal-color-swatches">
+        <div class="color-swatch active" style="background:#2E86C1" data-color="#2E86C1" onclick="setModalColor(this)"></div>
+        <div class="color-swatch" style="background:#C0392B" data-color="#C0392B" onclick="setModalColor(this)"></div>
+        <div class="color-swatch" style="background:#27AE60" data-color="#27AE60" onclick="setModalColor(this)"></div>
+        <div class="color-swatch" style="background:#8E44AD" data-color="#8E44AD" onclick="setModalColor(this)"></div>
+        <div class="color-swatch" style="background:#E67E22" data-color="#E67E22" onclick="setModalColor(this)"></div>
+        <div class="color-swatch" style="background:#C9A227" data-color="#C9A227" onclick="setModalColor(this)"></div>
+        <div class="color-swatch" style="background:#1ABC9C" data-color="#1ABC9C" onclick="setModalColor(this)"></div>
+        <div class="color-swatch" style="background:#ECF0F1" data-color="#ECF0F1" onclick="setModalColor(this)"></div>
+      </div>
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">Pontos de Ego (Reserva)</label>
+      <input class="modal-input" id="m-maxego" type="number" min="1" max="12" value="5" placeholder="ex: 5">
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">Estado</label>
+      <div class="toggle-row">
+        <button class="toggle-btn active flow" id="ms-flow" onclick="toggleModalState('flow')">FLOW</button>
+        <button class="toggle-btn collapsed" id="ms-collapsed" onclick="toggleModalState('collapsed')">COLAPSO</button>
+        <button class="toggle-btn" id="ms-ball" onclick="toggleModalState('ball')">TEM BOLA</button>
+      </div>
+    </div>
+    <div class="modal-row" style="margin-top:14px;">
+      <button class="modal-btn cancel" onclick="closeModal()">CANCELAR</button>
+      <button class="modal-btn" onclick="saveToken()">SALVAR</button>
+    </div>
+    <div id="modal-delete-row" class="hidden" style="margin-top:8px;">
+      <button class="modal-btn" style="background:var(--red); color:white; width:100%;" onclick="deleteToken()">REMOVER TOKEN</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════
+let roomCode = '';
+let myId = '';
+let myName = '';
+let myChar = '';
+let myRole = '';
+let myTeam = 'A';
+let isNarrador = false;
+let pollInterval = null;
+let lastStateHash = '';
+
+let gameState = {
+  score: { A: 0, B: 0 },
+  teamNames: { A: 'Time A', B: 'Time B' },
+  tokens: {},    // id -> token obj
+  log: [],
+  dicelog: []
+};
+
+let modalEditId = null;
+let modalTeam = 'A';
+let modalColor = '#2E86C1';
+let modalStates = { flow: false, collapsed: false, ball: false };
+let selectedPool = 3;
+let dragState = null;
+
+// ══════════════════════════════════════════
+// LOBBY
+// ══════════════════════════════════════════
+function showJoin() {
+  document.getElementById('lobby-main').classList.add('hidden');
+  document.getElementById('lobby-join').classList.remove('hidden');
+}
+function showMain() {
+  document.getElementById('lobby-main').classList.remove('hidden');
+  document.getElementById('lobby-join').classList.add('hidden');
+}
+
+function genCode() {
+  return Math.random().toString(36).substring(2, 6).toUpperCase();
+}
+
+function validateLobby() {
+  const name = document.getElementById('lb-name').value.trim();
+  const char = document.getElementById('lb-char').value.trim();
+  if (!name) { alert('Digite seu nome!'); return false; }
+  if (!char) { alert('Digite o nome do personagem!'); return false; }
+  return true;
+}
+
+async function createRoom() {
+  if (!validateLobby()) return;
+  roomCode = genCode();
+  myId = 'user_' + Date.now();
+  myName = document.getElementById('lb-name').value.trim();
+  myChar = document.getElementById('lb-char').value.trim();
+  myRole = document.getElementById('lb-role').value.trim() || 'Narrador';
+  myTeam = document.getElementById('lb-team').value;
+  isNarrador = (myTeam === 'N');
+
+  // init state
+  gameState.teamNames.A = 'Time A';
+  gameState.teamNames.B = 'Time B';
+
+  // save initial state
+  await saveState();
+
+  // register self
+  await registerPlayer();
+
+  document.getElementById('room-code-display').textContent = roomCode;
+  document.getElementById('lobby-main').classList.add('hidden');
+  document.getElementById('lobby-waiting').classList.remove('hidden');
+
+  // poll for player count
+  pollInterval = setInterval(updateWaitingCount, 2000);
+}
+
+async function joinRoom() {
+  if (!validateLobby()) return;
+  const code = document.getElementById('lb-code').value.trim().toUpperCase();
+  if (code.length !== 4) { alert('Código deve ter 4 letras!'); return; }
+
+  roomCode = code;
+  myId = 'user_' + Date.now();
+  myName = document.getElementById('lb-name').value.trim();
+  myChar = document.getElementById('lb-char').value.trim();
+  myRole = document.getElementById('lb-role').value.trim() || 'Jogador';
+  myTeam = document.getElementById('lb-team').value;
+  isNarrador = (myTeam === 'N');
+
+  // check room exists
+  try {
+    const state = await loadState();
+    if (!state) { alert('Sala não encontrada. Verifique o código.'); return; }
+    gameState = state;
+  } catch(e) {
+    alert('Sala não encontrada. Verifique o código.'); return;
+  }
+
+  await registerPlayer();
+  enterApp();
+}
+
+async function registerPlayer() {
+  const players = await loadPlayers() || {};
+  players[myId] = {
+    id: myId,
+    name: myName,
+    char: myChar,
+    role: myRole,
+    team: myTeam,
+    lastSeen: Date.now()
+  };
+  await savePlayers(players);
+}
+
+async function updateWaitingCount() {
+  const players = await loadPlayers() || {};
+  const active = Object.values(players).filter(p => Date.now() - p.lastSeen < 15000);
+  document.getElementById('waiting-count').textContent =
+    `${active.length} jogador${active.length !== 1 ? 'es' : ''} na sala`;
+}
+
+function copyCode() {
+  navigator.clipboard.writeText(roomCode).then(() => {
+    alert('Código copiado: ' + roomCode);
+  });
+}
+
+function enterApp() {
+  if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
+  document.getElementById('lobby').style.display = 'none';
+  document.getElementById('app').style.display = 'flex';
+  document.getElementById('room-code-topbar').textContent = roomCode;
+  document.getElementById('user-badge-top').textContent = myChar || myName;
+  document.getElementById('score-team-a-name').textContent = gameState.teamNames?.A || 'Time A';
+  document.getElementById('score-team-b-name').textContent = gameState.teamNames?.B || 'Time B';
+  initDicePanel();
+  renderAll();
+  startPolling();
+}
+
+// ══════════════════════════════════════════
+// STORAGE
+// ══════════════════════════════════════════
+function stateKey() { return `cdg_state_${roomCode}`; }
+function playersKey() { return `cdg_players_${roomCode}`; }
+
+async function saveState() {
+  try {
+    await window.storage.set(stateKey(), JSON.stringify(gameState), true);
+  } catch(e) { console.error('saveState error', e); }
+}
+
+async function loadState() {
+  try {
+    const r = await window.storage.get(stateKey(), true);
+    return r ? JSON.parse(r.value) : null;
+  } catch(e) { return null; }
+}
+
+async function savePlayers(players) {
+  try {
+    await window.storage.set(playersKey(), JSON.stringify(players), true);
+  } catch(e) {}
+}
+
+async function loadPlayers() {
+  try {
+    const r = await window.storage.get(playersKey(), true);
+    return r ? JSON.parse(r.value) : {};
+  } catch(e) { return {}; }
+}
+
+// ══════════════════════════════════════════
+// POLLING
+// ══════════════════════════════════════════
+function startPolling() {
+  // heartbeat
+  setInterval(async () => {
+    const players = await loadPlayers() || {};
+    if (players[myId]) {
+      players[myId].lastSeen = Date.now();
+      await savePlayers(players);
+    }
+  }, 5000);
+
+  // state sync
+  setInterval(async () => {
+    const state = await loadState();
+    if (!state) return;
+    const hash = JSON.stringify(state);
+    if (hash !== lastStateHash) {
+      lastStateHash = hash;
+      gameState = state;
+      renderAll();
+    }
+    // update online count
+    const players = await loadPlayers() || {};
+    const active = Object.values(players).filter(p => Date.now() - p.lastSeen < 12000);
+    document.getElementById('log-online').textContent = `● ${active.length} online`;
+  }, 2000);
+}
+
+// ══════════════════════════════════════════
+// RENDER
+// ══════════════════════════════════════════
+function renderAll() {
+  renderScore();
+  renderTokens();
+  renderPlayersList();
+  renderLog();
+}
+
+function renderScore() {
+  document.getElementById('score-a').textContent = gameState.score?.A ?? 0;
+  document.getElementById('score-b').textContent = gameState.score?.B ?? 0;
+  document.getElementById('score-team-a-name').textContent = gameState.teamNames?.A || 'Time A';
+  document.getElementById('score-team-b-name').textContent = gameState.teamNames?.B || 'Time B';
+}
+
+function renderTokens() {
+  const layer = document.getElementById('tokens-layer');
+  layer.innerHTML = '';
+
+  // ── BALL TOKEN ──
+  const ball = gameState.ball || { x: 50, y: 50 };
+  const ballEl = document.createElement('div');
+  ballEl.className = 'ball-token';
+  ballEl.style.left = ball.x + '%';
+  ballEl.style.top = ball.y + '%';
+  ballEl.textContent = '⚽';
+  ballEl.title = 'Bola — arraste para mover';
+  ballEl.dataset.id = '__ball__';
+  ballEl.addEventListener('mousedown', onTokenMouseDown);
+  ballEl.addEventListener('touchstart', onTokenTouchStart, { passive: true });
+  layer.appendChild(ballEl);
+
+  // ── PLAYER TOKENS ──
+  const tokens = gameState.tokens || {};
+  Object.values(tokens).forEach(t => {
+    const el = document.createElement('div');
+    el.className = 'token' + (t.flow ? ' flow' : '') + (t.collapsed ? ' collapsed' : '');
+    el.style.left = (t.x ?? 50) + '%';
+    el.style.top = (t.y ?? 50) + '%';
+    el.style.background = hexToRgba(t.color || '#2E86C1', 0.25);
+    el.style.borderColor = t.color || '#2E86C1';
+    el.style.color = t.color || '#2E86C1';
+    el.innerHTML = `<span class="token-initial">${t.initial || '?'}</span><span class="token-ego">${t.ego ?? t.maxEgo ?? '—'}/${t.maxEgo ?? '—'}</span>`;
+    el.title = t.name + (t.role ? ' · ' + t.role : '');
+    el.dataset.id = t.id;
+    el.addEventListener('mousedown', onTokenMouseDown);
+    el.addEventListener('touchstart', onTokenTouchStart, { passive: true });
+    el.addEventListener('dblclick', () => openEditToken(t.id));
+    layer.appendChild(el);
+  });
+}
+
+function renderPlayersList() {
+  const list = document.getElementById('players-list');
+  list.innerHTML = '';
+  const tokens = gameState.tokens || {};
+  if (Object.keys(tokens).length === 0) {
+    list.innerHTML = '<div style="color:var(--muted);font-family:\'Barlow Condensed\';font-size:12px;letter-spacing:1px;padding:8px 0;">Nenhum token em campo.<br>Use + TOKEN para adicionar.</div>';
+    return;
+  }
+  Object.values(tokens).forEach(t => {
+    const card = document.createElement('div');
+    card.className = 'player-card';
+    card.style.borderLeftColor = t.color || '#2E86C1';
+    card.innerHTML = `
+      <div class="pc-header">
+        <div class="pc-dot" style="background:${t.color || '#2E86C1'}"></div>
+        <div>
+          <div class="pc-name">${t.name || '?'}${t.team === 'N' ? '<span class="narrador-star">★</span>' : ''}</div>
+          <div class="pc-role">${t.role || ''} · ${t.team === 'N' ? 'Narrador' : 'Time ' + (t.team || 'A')}</div>
+        </div>
+      </div>
+      <div class="pc-status-row">
+        ${t.flow ? '<div class="pc-badge flow">FLOW</div>' : ''}
+        ${t.collapsed ? '<div class="pc-badge collapsed">COLAPSO</div>' : ''}
+        ${t.hasBall ? '<div class="pc-badge has-ball">⚽ BOLA</div>' : ''}
+      </div>
+      <div class="pc-ego-row" id="ego-row-${t.id}"></div>
+      <div class="pc-fatigue-row" id="fat-row-${t.id}"></div>`;
+    list.appendChild(card);
+    card.addEventListener('dblclick', () => openEditToken(t.id));
+    renderEgoPips(t);
+    renderFatigue(t);
+  });
+}
+
+function renderEgoPips(t) {
+  const row = document.getElementById('ego-row-' + t.id);
+  if (!row) return;
+  const max = t.maxEgo || 5;
+  const cur = t.ego ?? max;
+  row.innerHTML = '<span class="pc-ego-label">EGO</span>';
+  for (let i = 1; i <= max; i++) {
+    const pip = document.createElement('div');
+    pip.className = 'ego-pip' + (i <= cur ? ' filled' : '');
+    pip.title = 'Clique para ajustar Ego';
+    pip.addEventListener('click', () => setEgo(t.id, i === cur && cur > 0 ? i - 1 : i));
+    row.appendChild(pip);
+  }
+}
+
+function renderFatigue(t) {
+  const row = document.getElementById('fat-row-' + t.id);
+  if (!row) return;
+  const fat = t.fatigue || 0;
+  row.innerHTML = '<span class="pc-ego-label">FAD</span>';
+  for (let i = 1; i <= 6; i++) {
+    const box = document.createElement('div');
+    box.className = 'fatigue-box' + (i <= fat ? (i >= 4 ? ' filled' : ' warn') : '');
+    box.title = `Confronto físico ${i}`;
+    box.addEventListener('click', () => setFatigue(t.id, i === fat ? i - 1 : i));
+    row.appendChild(box);
+  }
+}
+
+function renderLog() {
+  const log = gameState.log || [];
+  if (log.length > 0) {
+    const latest = log[log.length - 1];
+    document.getElementById('log-latest').innerHTML = `<strong>${latest.who}</strong> ${latest.msg}`;
+  }
+  const dlog = document.getElementById('dice-log');
+  const dlogs = gameState.dicelog || [];
+  dlog.innerHTML = dlogs.slice(-8).reverse().map(e =>
+    `<div class="dice-log-entry"><span>${e.who}</span>: ${e.result} — <span>${e.successes} sucesso${e.successes !== 1 ? 's' : ''}</span></div>`
+  ).join('');
+}
+
+// ══════════════════════════════════════════
+// SCORE
+// ══════════════════════════════════════════
+async function changeScore(team, delta) {
+  if (!gameState.score) gameState.score = { A: 0, B: 0 };
+  gameState.score[team] = Math.max(0, (gameState.score[team] || 0) + delta);
+  if (delta > 0) addLog(`marcou GOL! 🎯 Placar: ${gameState.score.A} × ${gameState.score.B}`);
+  await saveState();
+  renderScore();
+}
+
+// ══════════════════════════════════════════
+// EGO & FATIGUE
+// ══════════════════════════════════════════
+async function setEgo(id, val) {
+  if (!gameState.tokens[id]) return;
+  gameState.tokens[id].ego = val;
+  await saveState();
+  renderPlayersList();
+  renderTokens();
+}
+
+async function setFatigue(id, val) {
+  if (!gameState.tokens[id]) return;
+  gameState.tokens[id].fatigue = val;
+  await saveState();
+  renderPlayersList();
+}
+
+// ══════════════════════════════════════════
+// DRAG TOKENS
+// ══════════════════════════════════════════
+function getFieldRect() {
+  return document.getElementById('field-container').getBoundingClientRect();
+}
+
+function onTokenMouseDown(e) {
+  e.preventDefault();
+  const id = e.currentTarget.dataset.id;
+  dragState = { id, startX: e.clientX, startY: e.clientY };
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
+}
+
+function onMouseMove(e) {
+  if (!dragState) return;
+  const rect = getFieldRect();
+  const x = ((e.clientX - rect.left) / rect.width) * 100;
+  const y = ((e.clientY - rect.top) / rect.height) * 100;
+  const clampedX = Math.max(2, Math.min(98, x));
+  const clampedY = Math.max(2, Math.min(98, y));
+  if (dragState.id === '__ball__') {
+    if (!gameState.ball) gameState.ball = {};
+    gameState.ball.x = clampedX;
+    gameState.ball.y = clampedY;
+  } else {
+    const t = gameState.tokens[dragState.id];
+    if (t) { t.x = clampedX; t.y = clampedY; }
+  }
+  renderTokens();
+}
+
+async function onMouseUp(e) {
+  if (dragState) {
+    await saveState();
+    dragState = null;
+  }
+  document.removeEventListener('mousemove', onMouseMove);
+  document.removeEventListener('mouseup', onMouseUp);
+}
+
+function onTokenTouchStart(e) {
+  const id = e.currentTarget.dataset.id;
+  dragState = { id };
+  document.addEventListener('touchmove', onTouchMove, { passive: false });
+  document.addEventListener('touchend', onTouchEnd);
+}
+
+function onTouchMove(e) {
+  e.preventDefault();
+  if (!dragState) return;
+  const touch = e.touches[0];
+  const rect = getFieldRect();
+  const x = ((touch.clientX - rect.left) / rect.width) * 100;
+  const y = ((touch.clientY - rect.top) / rect.height) * 100;
+  const clampedX = Math.max(2, Math.min(98, x));
+  const clampedY = Math.max(2, Math.min(98, y));
+  if (dragState.id === '__ball__') {
+    if (!gameState.ball) gameState.ball = {};
+    gameState.ball.x = clampedX;
+    gameState.ball.y = clampedY;
+  } else {
+    const t = gameState.tokens[dragState.id];
+    if (t) { t.x = clampedX; t.y = clampedY; }
+  }
+  renderTokens();
+}
+
+async function onTouchEnd() {
+  if (dragState) { await saveState(); dragState = null; }
+  document.removeEventListener('touchmove', onTouchMove);
+  document.removeEventListener('touchend', onTouchEnd);
+}
+
+// ══════════════════════════════════════════
+// TOKEN MODAL
+// ══════════════════════════════════════════
+function openAddToken() {
+  modalEditId = null;
+  modalTeam = myTeam === 'N' ? 'A' : myTeam;
+  modalColor = '#2E86C1';
+  modalStates = { flow: false, collapsed: false, ball: false };
+  document.getElementById('m-name').value = myChar || '';
+  document.getElementById('m-initial').value = (myChar || '?')[0].toUpperCase();
+  document.getElementById('m-role').value = myRole || '';
+  document.getElementById('m-maxego').value = '5';
+  document.getElementById('modal-title').textContent = 'NOVO TOKEN';
+  document.getElementById('modal-delete-row').classList.add('hidden');
+  updateModalTeamUI();
+  updateModalStateUI();
+  updateModalColorUI();
+  document.getElementById('token-modal').classList.remove('hidden');
+}
+
+function openEditToken(id) {
+  const t = gameState.tokens[id];
+  if (!t) return;
+  modalEditId = id;
+  modalTeam = t.team || 'A';
+  modalColor = t.color || '#2E86C1';
+  modalStates = { flow: !!t.flow, collapsed: !!t.collapsed, ball: !!t.hasBall };
+  document.getElementById('m-name').value = t.name || '';
+  document.getElementById('m-initial').value = t.initial || '';
+  document.getElementById('m-role').value = t.role || '';
+  document.getElementById('m-maxego').value = t.maxEgo || 5;
+  document.getElementById('modal-title').textContent = 'EDITAR TOKEN';
+  document.getElementById('modal-delete-row').classList.remove('hidden');
+  updateModalTeamUI();
+  updateModalStateUI();
+  updateModalColorUI();
+  document.getElementById('token-modal').classList.remove('hidden');
+}
+
+function closeModal() {
+  document.getElementById('token-modal').classList.add('hidden');
+}
+
+function setModalTeam(team) {
+  modalTeam = team;
+  updateModalTeamUI();
+}
+
+function updateModalTeamUI() {
+  ['A','B','N'].forEach(t => {
+    document.getElementById('mt-' + t).classList.toggle('active', modalTeam === t);
+  });
+}
+
+function setModalColor(el) {
+  modalColor = el.dataset.color;
+  updateModalColorUI();
+}
+
+function updateModalColorUI() {
+  document.querySelectorAll('#modal-color-swatches .color-swatch').forEach(s => {
+    s.classList.toggle('active', s.dataset.color === modalColor);
+  });
+}
+
+function toggleModalState(state) {
+  modalStates[state] = !modalStates[state];
+  updateModalStateUI();
+}
+
+function updateModalStateUI() {
+  document.getElementById('ms-flow').classList.toggle('active', modalStates.flow);
+  document.getElementById('ms-collapsed').classList.toggle('active', modalStates.collapsed);
+  document.getElementById('ms-ball').classList.toggle('active', modalStates.ball);
+}
+
+async function saveToken() {
+  const name = document.getElementById('m-name').value.trim() || 'Token';
+  const initial = document.getElementById('m-initial').value.trim() || name[0];
+  const role = document.getElementById('m-role').value.trim();
+  const maxEgo = parseInt(document.getElementById('m-maxego').value) || 5;
+
+  const id = modalEditId || ('tok_' + Date.now());
+  const existing = gameState.tokens[id] || {};
+
+  gameState.tokens[id] = {
+    ...existing,
+    id, name, initial, role,
+    team: modalTeam,
+    color: modalColor,
+    maxEgo,
+    ego: existing.ego ?? maxEgo,
+    flow: modalStates.flow,
+    collapsed: modalStates.collapsed,
+    hasBall: modalStates.ball,
+    x: existing.x ?? 50,
+    y: existing.y ?? 50,
+    fatigue: existing.fatigue ?? 0
+  };
+
+  // only one token can have the ball
+  if (modalStates.ball) {
+    Object.keys(gameState.tokens).forEach(k => {
+      if (k !== id) gameState.tokens[k].hasBall = false;
+    });
+  }
+
+  addLog(`${modalEditId ? 'editou' : 'adicionou'} o token de ${name}`);
+  await saveState();
+  closeModal();
+  renderAll();
+}
+
+async function deleteToken() {
+  if (!modalEditId) return;
+  const name = gameState.tokens[modalEditId]?.name || 'token';
+  delete gameState.tokens[modalEditId];
+  addLog(`removeu o token de ${name}`);
+  await saveState();
+  closeModal();
+  renderAll();
+}
+
+// ══════════════════════════════════════════
+// DICE
+// ══════════════════════════════════════════
+function initDicePanel() {
+  const row = document.getElementById('dice-pool-btns');
+  row.innerHTML = '';
+  for (let i = 1; i <= 10; i++) {
+    const btn = document.createElement('button');
+    btn.className = 'dice-num-btn' + (i === selectedPool ? ' selected' : '');
+    btn.textContent = i;
+    btn.onclick = () => selectPool(i);
+    row.appendChild(btn);
+  }
+}
+
+function selectPool(n) {
+  selectedPool = n;
+  document.querySelectorAll('.dice-num-btn').forEach((b, i) => {
+    b.classList.toggle('selected', i + 1 === n);
+  });
+}
+
+async function rollDice() {
+  const results = [];
+  for (let i = 0; i < selectedPool; i++) {
+    results.push(Math.floor(Math.random() * 6) + 1);
+  }
+  const successes = results.filter(r => r >= 4).length;
+
+  // render dice
+  const resEl = document.getElementById('dice-results');
+  resEl.innerHTML = '';
+  results.forEach((r, i) => {
+    const die = document.createElement('div');
+    die.className = 'die-face rolling' + (r >= 4 ? ' success' : '');
+    die.textContent = r;
+    die.style.animationDelay = (i * 50) + 'ms';
+    resEl.appendChild(die);
+  });
+
+  const summary = document.getElementById('dice-summary');
+  summary.style.display = 'block';
+  document.getElementById('dice-success-num').textContent = successes;
+
+  // log
+  const entry = {
+    who: myChar || myName,
+    result: results.join(', '),
+    successes,
+    pool: selectedPool,
+    time: Date.now()
+  };
+  if (!gameState.dicelog) gameState.dicelog = [];
+  gameState.dicelog.push(entry);
+  if (gameState.dicelog.length > 30) gameState.dicelog.shift();
+
+  addLog(`rolou ${selectedPool}d6 → [${results.join(',')}] — ${successes} sucesso${successes !== 1 ? 's' : ''}`);
+  await saveState();
+  renderLog();
+}
+
+// ══════════════════════════════════════════
+// LOG
+// ══════════════════════════════════════════
+function addLog(msg) {
+  if (!gameState.log) gameState.log = [];
+  gameState.log.push({ who: myChar || myName, msg, time: Date.now() });
+  if (gameState.log.length > 50) gameState.log.shift();
+}
+
+// ══════════════════════════════════════════
+// TABS & VIEW
+// ══════════════════════════════════════════
+function setSideTab(name, btn) {
+  document.querySelectorAll('.sidebar-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-players').classList.toggle('hidden', name !== 'players');
+  document.getElementById('tab-dice').classList.toggle('hidden', name !== 'dice');
+  document.getElementById('tab-ref').classList.toggle('hidden', name !== 'ref');
+}
+
+// ══════════════════════════════════════════
+// UTILS
+// ══════════════════════════════════════════
+function hexToRgba(hex, alpha) {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+</script>
+</body>
+</html>
